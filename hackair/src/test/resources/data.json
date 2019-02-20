@@ -1,0 +1,248 @@
+{
+	"code": 200,
+	"status": "",
+	"data": [
+		{
+			"datetime": 1530806632,
+			"loc": {
+				"type": "Point",
+				"coordinates": [
+					23.886141,
+					54.891802
+				]
+			},
+			"source_type": "flickr",
+			"pollutant_q": {
+				"value": "0.55",
+				"name": "AOD_AirPollutantValue",
+				"unit": "μg/m3"
+			},
+			"pollutant_i": {
+				"index": "bad",
+				"name": "AOD_AirPollutantIndex"
+			},
+			"date_str": "2018-07-05T16:03:52Z",
+			"created_at": "2018-07-06 12:26:49",
+			"source_info": {
+				"username": "A. Aleksandravičius",
+				"views": 38,
+				"title": "Hot Air Balloons | Kaunas Aerial",
+				"id": "29357897898",
+				"date_uploaded": {
+					"$date": {
+						"$numberLong": "1530855496000"
+					}
+				},
+				"image_url": "https://farm2.staticflickr.com/1825/29357897898_c7a996957f.jpg",
+				"path": "flickr/2018-07-06/29357897898.jpg",
+				"page_url": "https://www.flickr.com/photos/95597086@N00/29357897898"
+			},
+			"_id": "5b3f61ffff75176be65e3200",
+			"real_datetime": "2018-07-05 16:03:52"
+		},
+		{
+			"datetime": 1546342583,
+			"loc": {
+				"coordinates": [
+					7.902,
+					47.978
+				],
+				"type": "Point"
+			},
+			"source_type": "webservices",
+			"pollutant_q": {
+				"name": "PM2.5_AirPollutantValue",
+				"value": 18.53,
+				"unit": "μg/m3"
+			},
+			"pollutant_i": {
+				"name": "PM2.5_AirPollutantIndex",
+				"index": "good"
+			},
+			"date_str": "2019-01-01T11:36:23Z",
+			"created_at": "2019-01-01 12:15:18",
+			"source_info": {
+				"countryCode": "DE",
+				"location": "15885",
+				"source": "luftdaten"
+			},
+			"_id": "5c2b59d62f702f5b95119c9c",
+			"real_datetime": "2019-01-01 11:36:23"
+		},
+		{
+			"datetime": 1524132206,
+			"loc": {
+				"type": "Point",
+				"coordinates": [
+					22.146875,
+					36.974341
+				]
+			},
+			"source_type": "webcams",
+			"pollutant_q": {
+				"value": "0.55",
+				"name": "AOD_AirPollutantValue",
+				"unit": "μg/m3"
+			},
+			"pollutant_i": {
+				"index": "bad",
+				"name": "AOD_AirPollutantIndex"
+			},
+			"date_str": "2018-04-19T10:03:26Z",
+			"created_at": "2018-04-19 10:23:10",
+			"source_info": {
+				"webcam_id": "1512145981",
+				"id": "1489662081_20180419_100326",
+				"image_url": "https://services.hackair.eu:8083/images/webcams/travel/1489662081/201804/1489662081_20180419_100326.jpg",
+				"path": "webcams/travel/1489662081/201804/1489662081_20180419_100326.jpg",
+				"url_original": "https://services.hackair.eu:8083/images/webcams/travel/1489662081/201804/1489662081_20180419_100326.jpg"
+			},
+			"_id": "5ad86e1f0966c30885247da8",
+			"real_datetime": "2018-04-19 10:03:26"
+		},
+		{
+			"datetime": 1547898287,
+			"loc": {
+				"type": "Point",
+				"coordinates": [
+					4.6483112121651,
+					51.17050139944
+				]
+			},
+			"source_type": "sensors_cots",
+			"pollutant_q": {
+				"value": "192",
+				"name": "COTS_AirPollutantValue",
+				"unit": "μg/m3"
+			},
+			"pollutant_i": {
+				"index": "very_good",
+				"name": "COTS_AirPollutantIndex"
+			},
+			"date_str": "2019-01-19T11:44:47Z",
+			"created_at": "2019-01-19 11:44:47",
+			"source_info": {
+				"thumb_file_path": "public/uploads/mobile_cots/thumbs/ee8e45c4a1865f488d2eb717250f7ecf.jpeg",
+				"thumb_image_url": "http://api.hackair.eu/uploads/mobile_cots/thumbs/ee8e45c4a1865f488d2eb717250f7ecf.jpeg",
+				"file_path": "public/uploads/mobile_cots/ee8e45c4a1865f488d2eb717250f7ecf.jpeg",
+				"image_url": "http://api.hackair.eu/uploads/mobile_cots/ee8e45c4a1865f488d2eb717250f7ecf.jpeg",
+				"id": "cots_8fea8f1913605815d8cad2e0021458c8",
+				"device": {
+					"uuid": ""
+				},
+				"user": {
+					"username": "Frankmaertens",
+					"id": 3311
+				}
+			},
+			"_id": "5c430db0a1fb0169fb8739e3",
+			"real_datetime": "2019-01-19 11:44:47"
+		},
+		{
+			"datetime": 1516271796,
+			"loc": {
+				"type": "Point",
+				"coordinates": [
+					22.943612315723,
+					40.631622971805
+				]
+			},
+			"source_type": "sensors_bleair",
+			"pollutant_q": {
+				"name": "PM10_AirPollutantValue",
+				"value": 5,
+				"unit": "μg/m3"
+			},
+			"pollutant_i": {
+				"name": "PM10_AirPollutantIndex",
+				"index": "very_good"
+			},
+			"date_str": "2018-01-18T10:36:36Z",
+			"created_at": "2018-01-18 10:36:36",
+			"source_info": {
+				"user": {
+					"id": 1,
+					"username": "sID :254"
+				},
+				"sensor": {
+					"id": 254
+				}
+			},
+			"_id": "5a6078b42f702f07b20b6afb",
+			"real_datetime": "2018-01-18 10:36:36"
+		},
+		{
+			"datetime": 1546410575,
+			"loc": {
+				"type": "Point",
+				"coordinates": [
+					13.665615677801,
+					51.099389404913
+				]
+			},
+			"source_type": "sensors_arduino",
+			"pollutant_q": {
+				"name": "PM10_AirPollutantValue",
+				"value": "25.34",
+				"unit": "μg/m3"
+			},
+			"pollutant_i": {
+				"name": "PM10_AirPollutantIndex",
+				"index": "good"
+			},
+			"date_str": "2019-01-02T06:29:35Z",
+			"created_at": "2019-01-02 06:29:35",
+			"source_info": {
+				"user": {
+					"id": 1743,
+					"username": "sID :742"
+				},
+				"sensor": {
+					"id": 742,
+					"battery": 6,
+					"tamper": 0,
+					"error": 2
+				}
+			},
+			"_id": "5c2c5a4f2f702f6f1839d7ed",
+			"real_datetime": "2019-01-02 06:29:35"
+		},
+		{
+			"datetime": 1517826504,
+			"loc": {
+				"type": "Point",
+				"coordinates": [
+					22.9435805,
+					40.631482
+				]
+			},
+			"source_type": "mobile",
+			"pollutant_q": {
+				"value": "0.55",
+				"name": "AOD_AirPollutantValue",
+				"unit": "μg/m3"
+			},
+			"pollutant_i": {
+				"index": "bad",
+				"name": "AOD_AirPollutantIndex"
+			},
+			"date_str": "2018-02-05T10:28:24Z",
+			"created_at": "2018-02-05 10:28:25",
+			"source_info": {
+				"thumb_file_path": "public/uploads/mobile_sky/thumbs/a40c6dd99230b5835efffee7edae92f5.jpeg",
+				"thumb_image_url": "https://api.hackair.eu/uploads/mobile_sky/thumbs/a40c6dd99230b5835efffee7edae92f5.jpeg",
+				"file_path": "public/uploads/mobile_sky/a40c6dd99230b5835efffee7edae92f5.jpeg",
+				"image_url": "https://api.hackair.eu/uploads/mobile_sky/a40c6dd99230b5835efffee7edae92f5.jpeg",
+				"id": "mobile_72d6d8a39192b02a53b88ed4a6014731",
+				"user": {
+					"username": "psyropou",
+					"id": 24
+				}
+			},
+			"_id": "5a7af48b2294367497afc37f",
+			"real_datetime": "2018-02-05 10:28:24"
+		}
+	],
+	"message": "",
+	"count": 600
+}

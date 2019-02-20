@@ -1,0 +1,40 @@
+{
+    "url": "https://api.hackair.eu/",
+    "accept": "application/vnd.hackair.v1+json",
+    "globalStartTime": "2017-01-01T00:00:00Z",
+    "cronExpression": "0 0/30 * * * ?",
+    "sources": [
+      {
+        "source": "flickr",
+        "lastDateTime": "2018-11-26T00:00:00Z"
+      },
+      {
+        "source": "webcams",
+        "lastDateTime": null
+      },
+      {
+        "source": "mobile",
+        "lastDateTime": null
+      },
+      {
+        "source": "sensors_arduino",
+        "lastDateTime": null
+      },
+      {
+        "source": "sensors_bleair",
+        "lastDateTime": null
+      },
+      {
+        "source": "sensors_cots",
+        "lastDateTime": null
+      },
+      {
+        "source": "websites",
+        "lastDateTime": null
+      },
+      {
+        "source": "webservices",
+        "lastDateTime": null
+      }
+  ]
+}
