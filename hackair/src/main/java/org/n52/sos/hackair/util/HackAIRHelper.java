@@ -7,7 +7,11 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
@@ -19,6 +23,7 @@ import org.n52.sos.hackair.data.Data;
 import org.n52.sos.hackair.data.PollutantQ;
 import org.n52.sos.hackair.data.Response;
 import org.n52.sos.hackair.ds.HackAIRConfiguration;
+import org.n52.sos.ogc.gml.CodeWithAuthority;
 import org.n52.sos.util.DateTimeHelper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,20 +76,30 @@ public interface HackAIRHelper {
     }
     
     default boolean checkForIntervalBetweenResponseAndStartTime(DateTime startTime, Response response) {
-        try {
-            Set<String> collect = response.getData().stream().map(d -> d.getDateStr()).collect(Collectors.toSet());
-            DateTime first = DateTime.now();
-            for (String timeString : collect) {
-                DateTime current = DateTimeHelper.parseIsoString2DateTime(timeString);
-                first = current.isBefore(first) ? current : first;
-
-            }
-            return new Interval(startTime, first).toDurationMillis() > 60000;
-        } catch (DateTimeParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        DateTime first = DateTime.now();
+        for (DateTime current : getDateTimes(response)) {
+            first = current.isBefore(first) ? current : first;
         }
-        return false;
+        return new Interval(startTime, first).toDurationMillis() > 60000;
+    }
+    
+    default DateTime getFirstTime(Response response) {
+        return Collections.min(getDateTimes(response));
+    }
+    
+    default DateTime getLastTime(Response response) {
+        return Collections.max(getDateTimes(response));
+    }
+
+    default Set<DateTime> getDateTimes(Response response) {
+        SortedSet<DateTime> collect = new TreeSet<>();
+        for (String timeString : response.getData().stream().map(d -> d.getDateStr()).collect(Collectors.toSet())) {
+            try {
+                collect.add(DateTimeHelper.parseIsoString2DateTime(timeString));
+            } catch (DateTimeParseException e) {
+            }
+        }
+        return collect;
     }
 
     default String prepareSubProcedure(String source, Integer sensorId) {
@@ -125,6 +140,19 @@ public interface HackAIRHelper {
     default String joinValues(String... parts) {
         return Joiner.on("_").join(parts);
     }
+    
+    default String joinValues(List<Double> list) {
+        return Joiner.on("_").join(list);
+    }
+    
+    default CodeWithAuthority createIdentifier(String source, String id) {
+        return new CodeWithAuthority(joinValues(source,id));
+    }
+    
+    default String getIdSubstring(String id) {
+        return id.contains("_") ? id.substring(0, id.indexOf("_")) : id;
+    }
+
     
     default HackAIRConfiguration readConfig(String file) throws CodedException {
         try (InputStream is  = Files.newInputStream(Paths.get(getClass().getResource(getFileName(file)).toURI()))) {
