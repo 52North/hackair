@@ -1,7 +1,5 @@
 package org.n52.sos.hackair.ds;
 
-import static org.junit.Assert.assertNotEquals;
-
 import java.io.IOException;
 
 import org.joda.time.DateTime;
@@ -12,7 +10,6 @@ import org.n52.sos.hackair.data.Response;
 import org.n52.sos.hackair.util.HttpClientHandler;
 import org.n52.sos.ogc.ows.OwsExceptionReport;
 import org.n52.sos.util.DateTimeHelper;
-import org.springframework.cglib.core.internal.CustomizerRegistry;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
