@@ -20,6 +20,13 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/resources</directory>
+                            <filtering>true</filtering>
+                            <targetPath>WEB-INF/classes</targetPath>
+                        </resource>
+                    </webResources>
                     <overlays>
                         <overlay>
                             <groupId>org.n52.sensorweb.sos</groupId>

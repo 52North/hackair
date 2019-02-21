@@ -30,6 +30,10 @@
             <artifactId>coding-sos-v20</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.n52.sensorweb.sos</groupId>
+            <artifactId>admin-controller</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.n52.series-api</groupId>
             <artifactId>io</artifactId>
             <exclusions>
