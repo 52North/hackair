@@ -34,6 +34,7 @@ import javax.inject.Inject;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.Period;
 import org.n52.io.task.ScheduledJob;
 import org.n52.sos.cache.ContentCache;
 import org.n52.sos.exception.CodedException;
@@ -117,15 +118,24 @@ public class HackAIRDataSourceHarvesterJob extends ScheduledJob implements Job, 
             for (SourceMetadata source : config.getSources()) {
                 try {
                     if (source.hasLastDateTime()) {
-                        processData(source, source.getLastDateTimeAsDateTime());
+                        if (source.getLastDateTimeAsDateTime().isBefore(DateTime.now())) {
+                            processData(source, source.getLastDateTimeAsDateTime());
+                        } else {
+                            LOGGER.warn("The last date time of source '" + source.getSource() + "' is in the future '"
+                                    + source.getLastDateTime() + "'!");
+                        }
                     } else {
-                        processData(source, config.getGlobalStartTimeAsDateTime());
+                        if (config.getGlobalStartTimeAsDateTime().isBefore(DateTime.now())) {
+                            processData(source, config.getGlobalStartTimeAsDateTime());
+                        } else {
+                            LOGGER.warn("The global date time is in the future '" + source.getLastDateTime() + "'!");
+                        }
                     }
                 } catch (Exception e) {
                     LOGGER.error("Error while processing data for source '" + source.getSource() + "'!", e);
                 }
+                writeConfig(config);
             }
-            writeConfig(config);
         } catch (CodedException e1) {
             LOGGER.error("Error while processing configuration file!", e1);
         }
@@ -133,28 +143,38 @@ public class HackAIRDataSourceHarvesterJob extends ScheduledJob implements Job, 
     }
     
     private void processData(SourceMetadata source, DateTime startTime) throws OwsExceptionReport {
-        processData(source, startTime, null);
+        processData(source, startTime, startTime.plus(source.getIntervalAsPeriod()));
     }
 
-    private void processData(SourceMetadata source, DateTime startTime, DateTime endTime) throws OwsExceptionReport, CodedException {
+    private void processData(SourceMetadata source, DateTime startTime, DateTime endTime)
+            throws OwsExceptionReport, CodedException {
         Response response = connector.getData(startTime, endTime, source.getSource());
-        if (response != null && response.getCount() > 0) {
-            if (response.getCount() == 600 || checkForIntervalBetweenResponseAndStartTime(startTime, response)) {
-                endTime = endTime != null 
-                        ? startTime.plusSeconds(calculateDurationSesonds(startTime, endTime))
-                        : startTime.plusMonths(1).isAfter(DateTime.now())
-                            ? startTime.plusSeconds(calculateDurationSesonds(startTime, DateTime.now()))
-                            : startTime.plusMonths(1);
-                processData(source, startTime, endTime);
+        // process if response not null and count is > 600 or end time is before
+        // now
+        if ((response != null && response.getCount() > 0) || endTime.isBeforeNow()) {
+            
+            if (response.getCount() == 600 || (response.getCount() > 0
+                    && containsOnlyNewerValues(response, startTime, source.getIntervalAsPeriod()))) {
+                // reduce interval if the result count ix > 600 or if the resulting
+                // data are only in the last hals of the requested interval and query again
+                source.reduceInterval();
+                processData(source, startTime);
             } else {
-                processInsertSensor(source, response);
-                DateTime lastDateTime = processInsertObservation(response);
-                if (lastDateTime != null
-                        && (!source.hasLastDateTime() || source.getLastDateTimeAsDateTime().isBefore(lastDateTime))) {
-                    source.setLastDateTime(lastDateTime);
-                }
-                if (new Interval(lastDateTime, DateTime.now()).toDurationMillis() > 60000) {
-                    processData(source, lastDateTime);
+                if (response.getCount() == 0) {
+                    // if the result contains no data, increase the interval and
+                    // query starting from requested end time
+                    source.increaseInterval();
+                    source.setLastDateTime(endTime);
+                    processData(source, endTime);
+                } else {
+                    // process data and query next values
+                    processInsertSensor(source, response);
+                    DateTime lastDateTime = processInsertObservation(response);
+                    if (lastDateTime != null
+                            && (!source.hasLastDateTime() || source.getLastDateTimeAsDateTime().isBefore(lastDateTime))) {
+                        source.setLastDateTime(lastDateTime);
+                    }
+                    processData(source, endTime); 
                 }
             }
         } else {
@@ -163,6 +183,10 @@ public class HackAIRDataSourceHarvesterJob extends ScheduledJob implements Job, 
         }
     }
     
+    private boolean containsOnlyNewerValues(Response response, DateTime startTime, Period period) {
+        return startTime.plus(period.toStandardDuration().dividedBy(2).toPeriod()).isBefore(getFirstTime(response));
+    }
+
     private void processInsertSensor(SourceMetadata source, Response response) throws OwsExceptionReport {
         Set<PollutantQ> pollutants = getPollutants(response);
         if (!isProcedureRegistered(source.getSource())) {
@@ -171,7 +195,7 @@ public class HackAIRDataSourceHarvesterJob extends ScheduledJob implements Job, 
         Set<String> subSources = getSubSources(response);
         if (subSources.isEmpty()) {
             for (Integer sensorId : getSubProcedures(response)) {
-                LOGGER.debug("Processing sub-sensor '{}' for source '{}'", sensorId, source.getSource());
+                LOGGER.debug("Processing sensor '{}' for source '{}'", sensorId, source.getSource());
                 String subProcedure = prepareSubProcedure(source.getSource(), sensorId);
                 if (!isProcedureRegistered(subProcedure)) {
                     insertProcedureFromSource(source.getSource(), pollutants, subProcedure);
@@ -185,7 +209,7 @@ public class HackAIRDataSourceHarvesterJob extends ScheduledJob implements Job, 
                     insertProcedureFromSource(source.getSource(), pollutants, subSourceProcedureIdentifier);
                 }
                 for (Integer sensorId : getSubProcedures(response)) {
-                    LOGGER.debug("Processing sub-sensor '{}' for sub-source '{}' for source '{}'", sensorId, subSource,
+                    LOGGER.debug("Processing sensor '{}' for sub-source '{}' for source '{}'", sensorId, subSource,
                             source.getSource());
                     String subProcedure = prepareSubProcedure(subSourceProcedureIdentifier, sensorId);
                     if (!isProcedureRegistered(subProcedure)) {
