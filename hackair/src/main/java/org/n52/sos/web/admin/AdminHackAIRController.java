@@ -29,44 +29,45 @@
 package org.n52.sos.web.admin;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.n52.sos.exception.CodedException;
+import org.n52.sos.exception.ows.NoApplicableCodeException;
 import org.n52.sos.hackair.ds.HackAIRConfiguration;
 import org.n52.sos.hackair.harvester.HackAIRDataSourceHarvestJobFactory;
 import org.n52.sos.ogc.ows.OwsExceptionReport;
-import org.n52.sos.ogc.ows.StaticCapabilities;
-import org.n52.sos.service.Configurator;
-import org.n52.sos.service.profile.Profile;
-import org.n52.sos.service.profile.ProfileHandler;
-import org.n52.sos.util.JSONUtils;
+import org.n52.sos.ogc.sos.Sos2Constants;
+import org.n52.sos.request.InsertObservationRequest;
+import org.n52.sos.request.InsertSensorRequest;
+import org.n52.sos.request.operator.RequestOperator;
+import org.n52.sos.request.operator.RequestOperatorKey;
+import org.n52.sos.request.operator.RequestOperatorRepository;
+import org.n52.sos.service.operator.ServiceOperatorKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/admin/hackair")
-public class AdminHackAIRController {
+public class AdminHackAIRController extends AbstractAdminController {
 
     private static final Logger log = LoggerFactory.getLogger(AdminHackAIRController.class);
     
@@ -101,15 +102,24 @@ public class AdminHackAIRController {
     
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(value = "/start", method = RequestMethod.GET)
-    public void startHarvester() {
-        jobFactory.startOrUpdate();
+    public void startHarvester() throws CodedException {
+        if (checkTransactionalSupported()) {
+            jobFactory.startOrUpdate();
+        } else {
+            throw new RuntimeException("Please activate the transactional operations via the admin interface!");
+        }
     }
-    
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(value = "/update", method = RequestMethod.GET)
-    public void updateHarvester(JsonNode node) {
-//        writeConfig(readConfig());
-        jobFactory.startOrUpdate();
+    public void updateHarvester(JsonNode node) throws CodedException {
+        // writeConfig(readConfig());
+        if (checkTransactionalSupported()) {
+            jobFactory.startOrUpdate();
+        } else {
+            throw new NoApplicableCodeException()
+                    .withMessage("Please activate the transactional operations via the admin interface!");
+        }
     }
     
     
@@ -123,6 +133,21 @@ public class AdminHackAIRController {
         }
     }
     
+    private boolean checkTransactionalSupported() {
+        try {
+            InsertObservationRequest insertObservationRequest = new InsertObservationRequest();
+            insertObservationRequest.setService(Sos2Constants.SOS).setVersion(Sos2Constants.SERVICEVERSION);
+            InsertSensorRequest insertSensorRequest = new InsertSensorRequest();
+            insertSensorRequest.setService(Sos2Constants.SOS).setVersion(Sos2Constants.SERVICEVERSION);
+            return getRequestOperator(insertObservationRequest.getServiceOperatorKeyType(),
+                    insertObservationRequest.getOperationName()).size() > 0
+                    && getRequestOperator(insertSensorRequest.getServiceOperatorKeyType(),
+                            insertSensorRequest.getOperationName()).size() > 0;
+        } catch (OwsExceptionReport e) {
+            return false;
+        }
+    }
+
     private void writeConfig(HackAIRConfiguration config) {
         try {
             File file = new File(getClass().getResource("/hackair.json").getFile());
@@ -130,6 +155,18 @@ public class AdminHackAIRController {
         } catch (IOException e) {
             log.error("Could not write {}.", "hackair.json", e);
         }
+    }
+    
+    private Set<RequestOperator> getRequestOperator(List<ServiceOperatorKey> list, String name) {
+        return list.stream().map(sok -> getRequestOperator(sok, name)).filter(Objects::nonNull).collect(Collectors.toSet());
+    }
+    
+    private RequestOperator getRequestOperator(ServiceOperatorKey sok, String name) {
+        return getRequestOperatorRepository().getRequestOperator(new RequestOperatorKey(sok, name));
+    }
+    
+    private RequestOperatorRepository getRequestOperatorRepository() {
+        return RequestOperatorRepository.getInstance();
     }
     
 }
