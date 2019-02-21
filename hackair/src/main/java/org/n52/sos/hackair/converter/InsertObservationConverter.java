@@ -104,18 +104,16 @@ public class InsertObservationConverter implements HackAIRHelper {
             } else {
                 return createIdentifier(data.getSourceType(), data.getSourceInfo().getLocation());
             }
-        } else if (data.getSourceInfo().hasSensor()) {
+        } else if (data.getSourceInfo().hasSensor() && data.getSourceInfo().getSensor().hasId()) {
             return createIdentifier(data.getSourceType(), data.getSourceInfo().getSensor().getId().toString());
         } else if (data.getSourceInfo().hasWebcamId()) {
             return createIdentifier(data.getSourceType(), data.getSourceInfo().getWebcamId());
         } else if (data.getSourceInfo().hasDevice() && data.getSourceInfo().getDevice().hasUuid()) {
             return createIdentifier(data.getSourceType(), data.getSourceInfo().getDevice().getUuid());
+        } else if (data.getSourceInfo().hasId()) {
+            return createIdentifier(data.getSourceType(), getIdSubstring(data.getSourceInfo().getId()));
         }
-        return createIdentifier(data.getSourceType(), data.getSourceInfo().getId());
-    }
-    
-    private CodeWithAuthority createIdentifier(String source, String id) {
-        return new CodeWithAuthority(joinValues(source,id));
+        return createIdentifier(data.getSourceType(), joinValues(data.getLoc().getCoordinates()));
     }
     
     private SosProcedureDescription createProcedure(String procedure) {
