@@ -19,6 +19,10 @@ public class Sensor {
         this.id = id;
     }
 
+    public boolean hasId() {
+        return getId() != null;
+    }
+
     public Integer getBattery() {
         return battery;
     }

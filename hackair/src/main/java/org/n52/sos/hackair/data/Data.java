@@ -29,7 +29,11 @@ public class Data {
     private String realDatetime;
     private String city;
     private String photo;
-
+    @JsonProperty("image_info")
+    private ImageInfo imageInfo;
+    @JsonProperty("__v")
+    private Integer v;
+    
     @JsonProperty("datetime")
     public Long getDatetime() {
         return datetime;
@@ -157,5 +161,24 @@ public class Data {
         this.photo = photo;
     }
 
+    @JsonProperty("image_info")
+    public ImageInfo getImageInfo() {
+        return imageInfo;
+    }
+
+    @JsonProperty("image_info")
+    public void setImageInfo(ImageInfo imageInfo) {
+        this.imageInfo = imageInfo;
+    }
+
+    @JsonProperty("__v")
+    public Integer getV() {
+        return v;
+    }
+
+    @JsonProperty("__v")
+    public void setV(Integer v) {
+        this.v = v;
+    }
 
 }
