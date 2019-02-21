@@ -6,35 +6,43 @@
     "sources": [
       {
         "source": "flickr",
-        "lastDateTime": null
+        "lastDateTime": "2019-01-01T00:00:00Z",
+        "interval": "P30D"
       },
       {
         "source": "webcams",
-        "lastDateTime": null
+        "lastDateTime": "2019-01-01T00:00:00Z",
+        "interval": "P30D"
       },
       {
         "source": "mobile",
-        "lastDateTime": null
-      },
-      {
-        "source": "sensors_arduino",
-        "lastDateTime": null
-      },
-      {
-        "source": "sensors_bleair",
-        "lastDateTime": null
-      },
-      {
-        "source": "sensors_cots",
-        "lastDateTime": null
+        "lastDateTime": "2019-01-01T00:00:00Z",
+        "interval": "P30D"
       },
       {
         "source": "websites",
-        "lastDateTime": null
+        "lastDateTime": "2019-01-01T00:00:00Z",
+        "interval": "P30D"
+      },
+      {
+        "source": "sensors_bleair",
+        "lastDateTime": "2019-01-01T00:00:00Z",
+        "interval": "P30D"
+      },
+      {
+        "source": "sensors_cots",
+        "lastDateTime": "2019-01-01T00:00:00Z",
+        "interval": "P30D"
+      },
+      {
+        "source": "sensors_arduino",
+        "lastDateTime": "2019-02-21T00:00:00Z",
+        "interval":  "PT10m"
       },
       {
         "source": "webservices",
-        "lastDateTime": null
+        "lastDateTime": "2019-02-21T00:00:00Z",
+        "interval": "PT5m"
       }
   ]
 }

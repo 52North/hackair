@@ -1,40 +1,48 @@
 {
     "url": "https://api.hackair.eu/",
     "accept": "application/vnd.hackair.v1+json",
-    "globalStartTime": "2017-01-01T00:00:00Z",
+    "globalStartTime": "2019-02-01T00:00:00Z",
     "cronExpression": "0 0/30 * * * ?",
     "sources": [
       {
         "source": "flickr",
-        "lastDateTime": "2018-11-26T00:00:00Z"
+        "lastDateTime": "2017-01-01T00:00:00Z",
+        "interval": "P30D"
       },
       {
         "source": "webcams",
-        "lastDateTime": null
+        "lastDateTime": "2017-01-01T00:00:00Z",
+        "interval": "P30D"
       },
       {
         "source": "mobile",
-        "lastDateTime": null
+        "lastDateTime": "2017-01-01T00:00:00Z",
+        "interval": "P30D"
       },
       {
         "source": "sensors_arduino",
-        "lastDateTime": null
+        "lastDateTime": "2019-02-01T00:00:00Z",
+        "interval":  "PT10m"
       },
       {
         "source": "sensors_bleair",
-        "lastDateTime": null
+        "lastDateTime": "2017-02-01T00:00:00Z",
+        "interval": "P30D"
       },
       {
         "source": "sensors_cots",
-        "lastDateTime": null
+        "lastDateTime": "2017-02-01T00:00:00Z",
+        "interval": "P30D"
       },
       {
         "source": "websites",
-        "lastDateTime": null
+        "lastDateTime": "2017-02-01T00:00:00Z",
+        "interval": "P30D"
       },
       {
         "source": "webservices",
-        "lastDateTime": null
+        "lastDateTime": "2019-02-01T00:00:00Z",
+        "interval": "PT5m"
       }
   ]
 }
