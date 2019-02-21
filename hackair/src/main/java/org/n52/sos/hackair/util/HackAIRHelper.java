@@ -52,16 +52,18 @@ public interface HackAIRHelper {
 
     default Set<Integer> getSubProcedures(Response response) {
         if (response != null && response.hasData()) {
-            return response.getData().stream().filter(d -> d.hasSourceInfo() && d.getSourceInfo().hasSensor())
+            return response.getData().stream().filter(
+                    d -> d.hasSourceInfo() && d.getSourceInfo().hasSensor() && d.getSourceInfo().getSensor().hasId())
                     .map(d -> d.getSourceInfo().getSensor().getId()).collect(Collectors.toSet());
         }
         return Collections.emptySet();
     }
-    
+
     default Set<PollutantQ> getPollutantQForSensor(Integer sensorId, Response response) {
         if (response != null && response.hasData()) {
             return response.getData().stream()
                     .filter(d -> d.hasSourceInfo() && d.getSourceInfo().hasSensor()
+                            && d.getSourceInfo().getSensor().hasId()
                             && d.getSourceInfo().getSensor().getId().equals(sensorId))
                     .map(d -> d.getPollutantQ()).collect(Collectors.toSet());
         }
@@ -113,7 +115,7 @@ public interface HackAIRHelper {
         if (data != null && data.hasSourceInfo()) {
             identifier = data.getSourceInfo().hasSource() ? joinValues(identifier, data.getSourceInfo().getSource())
                     : identifier;
-            identifier = data.getSourceInfo().hasSensor()
+            identifier = data.getSourceInfo().hasSensor() && data.getSourceInfo().getSensor().hasId()
                     ? joinValues(identifier, data.getSourceInfo().getSensor().getId().toString())
                     : identifier;
         }
