@@ -33,9 +33,8 @@
     </licenses>
     <properties>
         <sos.version>4.4.5</sos.version>
-        <conf.sos.name>52n-sos-webapp</conf.sos.name>
+        <conf.sos.name>52n-sos-hackair-webapp</conf.sos.name>
          <dataset.api.version>2.0.0-alpha.6</dataset.api.version>
-    		<sos.version>4.4.5</sos.version>
     		<helgoland.version>1.0.0</helgoland.version>
         <timestamp>${maven.build.timestamp}</timestamp>
         <!-- Source encoding during build process ** !!! DO NOT CHANGE !!! 
