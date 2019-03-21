@@ -120,7 +120,7 @@ public class InsertSensorConverter implements HackAIRHelper {
     }
 
     protected SweText createText(String definition, String value) {
-        return (SweText) new SweText().setValue(value).setDefinition(definition);
+        return (SweText) new SweText().setValue(value).setDefinition(definition).setLabel("Offering " + value);
     }
 
     private List<SmlCapabilities> createMobileInsitu(String source) {
